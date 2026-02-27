@@ -1,78 +1,40 @@
 package com.subhash.quantitymeasurement;
 
-import java.util.Objects;
-
-import com.subhash.quantitymeasurement.Length.LengthUnit;
-
 public class QuantityMeasurementApp {
-	public static void comparision(String temp, Length l1, Length l2) {
+	
+	public static void demonstrateLengthComparison(Length l1, Length l2) {
 		if(l1.equals(l2)) {
-			System.out.println(temp+ " is equals");
+			System.out.println("Both lengths are equal (true)");
+		}else {
+			System.out.println("Both lengths are not equal (true)");
 		}
-		else {
-			System.out.println(temp+" is not equals");
-		}
-	}
-	public static void demonstrateFeetEquality() {
-		Length length1 = new Length(12.0, LengthUnit.FEET);
-		Length length2 = new Length(12.0, LengthUnit.FEET);
-		comparision("Feet" , length1, length2);
-	}
-	public static void demonstrateInchesEquality() {
-		Length length1 = new Length(12.0, LengthUnit.INCHES);
-		Length length2 = new Length(12.0, LengthUnit.INCHES);
-		comparision("Inches" , length1, length2);
-	}
-	public static void demonstrateFeetInchesComparision() {
-		Length length1 = new Length(1.0, LengthUnit.FEET);
-		Length length2 = new Length(12.0, LengthUnit.INCHES);
-		System.out.println("Are they equals? "+ length1.equals(length2));
 	}
 	
-	public static class Feet{
-		private final double value;
-		
-		public Feet(double value) {
-			this.value=value;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if(this==obj) return true;
-			if(obj==null || getClass()!=obj.getClass()) return false;
-			Feet other=(Feet) obj;
-			return Double.compare(this.value, other.value)==0;
-		}
-		
-		@Override
-		public int hashCode() {
-			return Objects.hash(value);
-		}
+	public static boolean demonstrateLengthEquality(Length l1, Length l2) {
+		return l1.equals(l2);
 	}
 
 	public static void main(String[] args) {
-		demonstrateFeetEquality();
-		demonstrateInchesEquality();
-		demonstrateFeetInchesComparision();
+		System.out.print("Comparison btw Feet & Inch: ");
+		demonstrateLengthComparison(new Length(1.0,Length.LengthUnit.FEET),
+									new Length(12.0,Length.LengthUnit.INCHES));
+		
+		System.out.print("Comparison btw Yard & Inch: ");
+		demonstrateLengthComparison(new Length(1.0,Length.LengthUnit.YARDS),
+									new Length(36.0,Length.LengthUnit.INCHES));
+		
+		System.out.print("Comparison btw Centimeter & Inch: ");
+		demonstrateLengthComparison(new Length(100.0,Length.LengthUnit.CENTIMETERS),
+									new Length(39.3701,Length.LengthUnit.INCHES));
+		
+		System.out.print("Comparison btw Feet & Yard: ");
+		demonstrateLengthComparison(new Length(3.0,Length.LengthUnit.FEET),
+									new Length(1.0,Length.LengthUnit.YARDS));
+		
+		System.out.print("Comparison btw Centimeter & Feet: ");
+		demonstrateLengthComparison(new Length(30.48,Length.LengthUnit.CENTIMETERS),
+									new Length(1.0,Length.LengthUnit.FEET));
+		
 	}
-	public static class Inches{
-       private final double value;
-		
-		public Inches(double value) {
-			this.value=value;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if(this==obj) return true;
-			if(obj==null || getClass()!=obj.getClass()) return false;
-			Inches other=(Inches) obj;
-			return Double.compare(this.value, other.value)==0;
-		}
-		
-		@Override
-		public int hashCode() {
-			return Objects.hash(value);
-		}
-	}	
-	}
+
+}
