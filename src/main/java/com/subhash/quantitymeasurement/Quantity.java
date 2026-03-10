@@ -1,5 +1,4 @@
 package com.subhash.quantitymeasurement;
-
 public class Quantity<U extends IMeasurable> {
 	
 	private double value;
@@ -26,6 +25,7 @@ public class Quantity<U extends IMeasurable> {
 		if(this==obj) return true;
 		if(obj==null || getClass()!=obj.getClass()) return false;
 		Quantity<?> other= (Quantity<?>) obj;
+		if (!this.unit.getClass().equals(other.getUnit().getClass())) return false;
 		return Math.abs(unit.convertToBaseUnit(value)-other.getUnit().convertToBaseUnit(other.getValue())) < EPSILON;
 	}
 	
