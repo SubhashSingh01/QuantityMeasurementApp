@@ -1,4 +1,5 @@
 package com.subhash.quantitymeasurement;
+
 public class Quantity<U extends IMeasurable> {
 	
 	private double value;
@@ -55,6 +56,26 @@ public class Quantity<U extends IMeasurable> {
 	public Quantity<U> add(Quantity<U> other){
 		if (other == null) throw new IllegalArgumentException("other cannot be null");
 		return add(other,unit);
+	}
+	
+	public Quantity<U> subtract(Quantity<U> other, U targetUnit){
+		if(other==null) throw new IllegalArgumentException("Quantity cannot be null!");
+		if(targetUnit==null) throw new IllegalArgumentException("Unit cannot be null");
+		double result=unit.convertToBaseUnit(value)-other.getUnit().convertToBaseUnit(other.getValue());
+		return new Quantity<>(targetUnit.convertFromBaseUnit(result),targetUnit);
+	}
+	
+	public Quantity<U> subtract(Quantity<U> other){
+		if (other == null) throw new IllegalArgumentException("other cannot be null");
+		return subtract(other,unit);
+	}
+	
+	public double divide(Quantity<U> other){
+		if(other==null) throw new IllegalArgumentException("Quantity cannot be null!");
+		double divisor=other.getUnit().convertToBaseUnit(other.getValue());
+		if(divisor==0) throw new IllegalArgumentException("Other quantity cannot be zero");
+		double result=unit.convertToBaseUnit(value)/divisor;
+		return result;
 	}
 	
 }
