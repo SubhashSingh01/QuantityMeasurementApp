@@ -1,4 +1,4 @@
-package com.subhash.quantitymeasurement;
+package com.subhash.quantitymeasurement.domain;
 
 public enum WeightUnit implements IMeasurable {
 	MILLIGRAM(0.000001),

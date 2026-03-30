@@ -1,4 +1,4 @@
-package com.subhash.quantitymeasurement;
+package com.subhash.quantitymeasurement.domain;
 
 import java.util.function.Function;
 
