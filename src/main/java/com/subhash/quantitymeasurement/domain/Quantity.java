@@ -42,8 +42,8 @@ public class Quantity<U extends IMeasurable> {
 	
 	public double convertTo(U targetUnit) {
 		if(targetUnit==null) throw new IllegalArgumentException("Unit cannot be null!");
-		double baseValue=unit.convertToBaseUnit(value);
-		return targetUnit.convertFromBaseUnit(baseValue);
+		double baseValue=unit.convertToBaseUnit(value);// like ,,converts 12 LengthUnit.FEET to 1 LengthUnit.INCHES 
+		return targetUnit.convertFromBaseUnit(baseValue); //now suppose targetunit is LengthUnit.CENTIMETERS, then 1 LengthUnit.INCHES will be converted to LengthUnit.CENTIMETERS 
 	}
 	
 	public Quantity<U> add(Quantity<U> other, U targetUnit){
