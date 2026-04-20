@@ -20,7 +20,8 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
     private QuantityMeasurementRepository repository;
 	
 	@SuppressWarnings("unchecked")
-    private <U extends IMeasurable> U resolveUnit(String measurementType, String unit) {
+    private <U extends IMeasurable> U resolveUnit(String measurementType, String unit) //converts unit to UPPERCASE(as enum object) if it isn't
+	{
         switch (measurementType) {
             case "LengthUnit":
                 return (U) LengthUnit.valueOf(unit.toUpperCase());
@@ -37,9 +38,10 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
         }
     }
 	
-	private <U extends IMeasurable> Quantity<U> convertDtoToModel(QuantityDTO dto) {
-        U unit = resolveUnit(dto.getMeasurementType(), dto.getUnit());
-        return new Quantity<>(dto.getValue(), unit);
+	private <U extends IMeasurable> Quantity<U> convertDtoToModel(QuantityDTO dto) //convert qtyDTO object into Qty<> object
+	{
+        U unit = resolveUnit(dto.getMeasurementType(), dto.getUnit()); //returns like LengthUnit.FEET 
+        return new Quantity<>(dto.getValue(), unit); //returns new Quantity<>(20,LengthUnit.FEET)
     }
 
 	private QuantityMeasurementDTO buildSaveAndReturn(
@@ -47,7 +49,8 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
             String operation,
             Double resultValue, String resultUnit, String resultMeasurementType,
             String resultString,
-            String errorMessage, boolean isError) {
+            String errorMessage, boolean isError) //building a qtymeasDto obj saving values to entity(table) and returning obj
+	{
 
         QuantityMeasurementDTO dto = new QuantityMeasurementDTO(
             thisDto.getValue(),   thisDto.getUnit(),   thisDto.getMeasurementType(),
@@ -63,21 +66,22 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
     }
 	
 	@Override
-    public QuantityMeasurementDTO compareQuantities(QuantityDTO thisDto, QuantityDTO thatDto) {
+    public QuantityMeasurementDTO compareQuantities(QuantityDTO thisDto, QuantityDTO thatDto) //compares two qtyDTO by first converting them into Qty<> objects aand then using equals method
+	{
         logger.info("compareQuantities: {} {} vs {} {}",
             thisDto.getValue(), thisDto.getUnit(),
             thatDto.getValue(), thatDto.getUnit());
         try {
-            Quantity<IMeasurable> q1 = convertDtoToModel(thisDto);
+            Quantity<IMeasurable> q1 = convertDtoToModel(thisDto); //converts qtyDTO object to Qty<> object,,,IMeasurable is parent class so no worry any class's Quantity's object can come
             Quantity<IMeasurable> q2 = convertDtoToModel(thatDto);
             boolean result = q1.equals(q2);
             
-            return buildSaveAndReturn(thisDto, thatDto, "compare",
+            return buildSaveAndReturn(thisDto, thatDto, "compare",  //saving information to db(no error came)
                 0.0, null, null, String.valueOf(result), null, false);
         } catch (Exception e) {
             logger.error("compareQuantities error: {}", e.getMessage());
             // Save the error record, then return DTO with error info
-            return buildSaveAndReturn(thisDto, thatDto, "compare",
+            return buildSaveAndReturn(thisDto, thatDto, "compare",  //saving the info to db(error came)
                 0.0, null, null, null, e.getMessage(), true);
         }
     }
@@ -87,9 +91,9 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
         logger.info("convertQuantity: {} {} → {}",
             thisDto.getValue(), thisDto.getUnit(), thatDto.getUnit());
         try {
-            Quantity<IMeasurable> q1 = convertDtoToModel(thisDto);
+            Quantity<IMeasurable> q1 = convertDtoToModel(thisDto);  //converting to Qty<> object
             
-            IMeasurable targetUnit = resolveUnit(thatDto.getMeasurementType(), thatDto.getUnit());
+            IMeasurable targetUnit = resolveUnit(thatDto.getMeasurementType(), thatDto.getUnit());// stores like LengthUnit.INCHES
             double converted = q1.convertTo(targetUnit);
             return buildSaveAndReturn(thisDto, thatDto, "convert",
                 converted, null, null, null, null, false);
@@ -208,4 +212,4 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
                 + a.getMeasurementType() + " and " + b.getMeasurementType());
         }
     }
-}
+}//Quantity<> class all functions called from service,, U unit's main functions
